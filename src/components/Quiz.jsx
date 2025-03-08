@@ -18,6 +18,7 @@ export default function Quiz() {
             </li>
           ))}
         </ul>
+        <h5>PRACTISE MAKES ONE PERFECT</h5>
       </div>
     </div>
   );

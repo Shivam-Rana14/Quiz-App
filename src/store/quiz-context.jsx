@@ -1,35 +1,39 @@
-import { createContext, useState } from "react";
+import { createContext, useCallback, useState } from "react";
 import QUESTIONS from "../questions.js";
 
 export const quizContext = createContext({
   activeQuestionIndex: 0,
   userAnswers: [],
   QUESTIONS: "",
-  shuffledAnswers: [],
   QUESTIONS: {},
   handleSelectAnswer: () => {},
+  handleSkipAnswer: () => {},
 });
 
 export default function QuizContextProvider({ children }) {
   const [userAnswers, setUserAnswers] = useState([]);
   const activeQuestionIndex = userAnswers.length;
 
-  const shuffledAnswers = [...QUESTIONS[activeQuestionIndex].answers];
-  shuffledAnswers.sort(() => Math.random() - 0.5);
-
-  function handleSelectAnswer(selectedAnswer) {
+  const handleSelectAnswer = useCallback(function handleSelectAnswer(
+    selectedAnswer
+  ) {
     setUserAnswers((prevUserAnswers) => {
       return [...prevUserAnswers, selectedAnswer];
     });
-    console.log(userAnswers);
-  }
+  },
+  []);
+  console.log(userAnswers);
+  const handleSkipAnswer = useCallback(
+    () => handleSelectAnswer(null),
+    [handleSelectAnswer]
+  );
 
   const quizCtx = {
     activeQuestionIndex: activeQuestionIndex,
     userAnswers: userAnswers,
-    shuffledAnswers: shuffledAnswers,
     QUESTIONS: QUESTIONS,
     handleSelectAnswer: handleSelectAnswer,
+    handleSkipAnswer: handleSkipAnswer,
   };
   return (
     <quizContext.Provider value={quizCtx}>{children}</quizContext.Provider>

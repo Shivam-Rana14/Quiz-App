@@ -1,38 +1,41 @@
-import { useContext, useRef } from "react";
-import { quizContext } from "../store/quiz-context";
+import { useRef } from "react";
 
-export default function Answers() {
-  const {
-    handleSelectAnswer,
-    answerState,
-    userAnswers,
-    QUESTIONS,
-    activeQuestionIndex,
-  } = useContext(quizContext);
+export default function Answers({
+  answers,
+  selectedAnswer,
+  answerState,
+  onSelect,
+}) {
   const shuffledAnswers = useRef();
+
   if (!shuffledAnswers.current) {
-    shuffledAnswers.current = [...QUESTIONS[activeQuestionIndex].answers];
+    shuffledAnswers.current = [...answers];
     shuffledAnswers.current.sort(() => Math.random() - 0.5);
   }
+
   return (
     <ul id="answers">
       {shuffledAnswers.current.map((answer) => {
-        const isSelected = userAnswers[userAnswers.length - 1] === answer;
+        const isSelected = selectedAnswer === answer;
         let cssClass = "";
+
         if (answerState === "answered" && isSelected) {
           cssClass = "selected";
         }
+
         if (
           (answerState === "correct" || answerState === "wrong") &&
           isSelected
         ) {
           cssClass = answerState;
         }
+
         return (
           <li key={answer} className="answer">
             <button
-              onClick={() => handleSelectAnswer(answer)}
+              onClick={() => onSelect(answer)}
               className={cssClass}
+              disabled={answerState !== ""}
             >
               {answer}
             </button>

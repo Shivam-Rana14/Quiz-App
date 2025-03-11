@@ -1,15 +1,12 @@
-import Header from "./components/Header";
-import Quiz from "./components/Quiz";
+import Header from "./components/Header.jsx";
+import Quiz from "./components/Quiz.jsx";
 
-import QuizContextProvider from "./store/quiz-context";
 function App() {
   return (
     <>
       <Header />
       <main>
-        <QuizContextProvider>
-          <Quiz />
-        </QuizContextProvider>
+        <Quiz />
       </main>
     </>
   );
